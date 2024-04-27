@@ -71,5 +71,17 @@ describe("ICO", () => {
       expect(tokenBalance).to.be.equals(tokenAmount);
       expect(tokenSold).to.be.equals(tokenAmount);
     });
+
+    it("Should updated the phase to Phase2 and charge 0.003ETH", async () => {
+      const { ico, addr1 } = await loadFixture(icoFixture);
+      const phaseOneMax = ethers.BigNumber.from(ethers.utils.parseUnits("5", 'ether'));
+      const phaseOneFee = ethers.utils.parseUnits("0.001", "ether");
+      const buy = await ico
+        .connect(addr1)
+        .buyToken(phaseOneMax, { value: phaseOneFee * 5 });
+      let tokenSold;
+      tokenSold = await ico.tokenSold();
+      expect(tokenSold).to.be.equals(ethers.utils.parseUnits("10", "ether"));
+    });
   });
 });
